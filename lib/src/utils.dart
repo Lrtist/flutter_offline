@@ -25,21 +25,22 @@ StreamTransformer<ConnectivityResult, ConnectivityResult> debounce(
   );
 }
 
-StreamTransformer<ConnectivityResult, ConnectivityResult> startsWith(
-  ConnectivityResult data,
+StreamTransformer<List<ConnectivityResult>, dynamic> startsWith(
+  List<ConnectivityResult> data,
 ) {
-  return StreamTransformer<ConnectivityResult, ConnectivityResult>(
+  return StreamTransformer<List<ConnectivityResult>, dynamic>(
     (
-      Stream<ConnectivityResult> input,
+      Stream<List<ConnectivityResult>> input,
       bool cancelOnError,
     ) {
-      StreamController<ConnectivityResult>? controller;
-      late StreamSubscription<ConnectivityResult> subscription;
+      StreamController<List<ConnectivityResult>>? controller;
+      late StreamSubscription<List<ConnectivityResult>> subscription;
 
-      controller = StreamController<ConnectivityResult>(
+      controller = StreamController<List<ConnectivityResult>>(
         sync: true,
-        onListen: () => controller?.add(data),
-        onPause: ([Future<dynamic>? resumeSignal]) => subscription.pause(resumeSignal),
+        onListen: () => NewMethod(data, controller),
+        onPause: ([Future<dynamic>? resumeSignal]) =>
+            subscription.pause(resumeSignal),
         onResume: () => subscription.resume(),
         onCancel: () => subscription.cancel(),
       );
@@ -55,3 +56,7 @@ StreamTransformer<ConnectivityResult, ConnectivityResult> startsWith(
     },
   );
 }
+
+void NewMethod(List<ConnectivityResult> data,
+        StreamController<List<ConnectivityResult>>? controller) =>
+    controller?.add(data);
